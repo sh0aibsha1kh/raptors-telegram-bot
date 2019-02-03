@@ -1,6 +1,7 @@
 const rp = require('request-promise');
 const $ = require('cheerio');
 const TelegramBotAPI = require('node-telegram-bot-api');
+const puppeteer = require('puppeteer');
 const { TOKEN, URL } = require('./private/credentials');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
@@ -31,11 +32,11 @@ async function getTeamData() {
     return parsedData
 }
 
-async function getLastTenGames() {
+async function getNLastGames(n) {
     const scores = await getScoreData();
     const teams = await getTeamData();
-    let output = '_Last 10 Games_: \n\n';
-    for (i = scores.length - 10; i < scores.length; i++) {
+    let output = `_Last${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
+    for (i = scores.length - n; i < scores.length; i++) {
         let individualScores = scores[i].split('-');
         if (parseInt(individualScores[0], 10) > parseInt(individualScores[1], 10)) {
             output += `*RAPTORS*    ${scores[i]}    ${teams[i]}\n`;
@@ -46,9 +47,8 @@ async function getLastTenGames() {
     return output;
 }
 
-raptorsTelegramBot.on('message', async (msg) => {
+raptorsTelegramBot.onText(/\/last (\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    if (msg.text.toString() === '/lastTenGames') {
-        raptorsTelegramBot.sendMessage(chatId, await getLastTenGames(), { parse_mode: "Markdown" });
-    }
+    raptorsTelegramBot.sendMessage(chatId, await getNLastGames(match[1]), { parse_mode: 'Markdown' });
+
 });
