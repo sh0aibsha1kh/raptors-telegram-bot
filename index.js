@@ -14,7 +14,7 @@ async function getScoreData() {
             continue;
         }
         if (unparsedData[i].includes('L') || unparsedData[i].includes('W')) {
-            parsedData.push(unparsedData[i].slice(0, unparsedData[i].length - 1))
+            parsedData.push(unparsedData[i].slice(0, unparsedData[i].length - 1));
         }
     }
     parsedData.push(unparsedData[unparsedData.length - 1]);
@@ -24,7 +24,7 @@ async function getScoreData() {
 async function getTeamData() {
     const html = await rp(URL);
     const unparsedData = $('img.logo', html);
-    let parsedData = []
+    let parsedData = [];
     unparsedData.each((index, element) => {
         parsedData.push($(element).attr('alt').toUpperCase());
     });
@@ -34,17 +34,21 @@ async function getTeamData() {
 async function getLastTenGames() {
     const scores = await getScoreData();
     const teams = await getTeamData();
-    let output = '_Last 10 Games_: \n'
-    for (i = scores.length - 10; i < scores.length ; i++) {
-        output += `RAPTORS *${scores[i]}* ${teams[i]}\n`
+    let output = '_Last 10 Games_: \n\n';
+    for (i = scores.length - 10; i < scores.length; i++) {
+        let individualScores = scores[i].split('-');
+        if (parseInt(individualScores[0], 10) > parseInt(individualScores[1], 10)) {
+            output += `*RAPTORS*    ${scores[i]}    ${teams[i]}\n`;
+        } else {
+            output += `RAPTORS    ${scores[i]}    *${teams[i]}*\n`;
+        }
     }
-    return output
-
+    return output;
 }
 
 raptorsTelegramBot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     if (msg.text.toString() === '/lastTenGames') {
-        raptorsTelegramBot.sendMessage(chatId, await getLastTenGames(), {parse_mode : "Markdown"})
+        raptorsTelegramBot.sendMessage(chatId, await getLastTenGames(), { parse_mode: "Markdown" });
     }
 });
