@@ -8,7 +8,6 @@ const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
 async function getScoreData() {
     const html = await rp(URL);
     const unparsedData = $('.game-status__past', html).text().split(' ');
-    console.log(unparsedData);
     let parsedData = [];
     for (let i = 0; i < unparsedData.length; i++) {
         if (unparsedData[i] === 'L' || unparsedData[i] === 'W') {
@@ -35,9 +34,9 @@ async function getTeamData() {
 async function getLastTenGames() {
     const scores = await getScoreData();
     const teams = await getTeamData();
-    let output = 'Last 10 Games: \n'
+    let output = '_Last 10 Games_: \n'
     for (i = scores.length - 10; i < scores.length ; i++) {
-        output += `RAPTORS ${scores[i]} ${teams[i]}\n`
+        output += `RAPTORS *${scores[i]}* ${teams[i]}\n`
     }
     return output
 
@@ -46,6 +45,6 @@ async function getLastTenGames() {
 raptorsTelegramBot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     if (msg.text.toString() === '/lastTenGames') {
-        raptorsTelegramBot.sendMessage(chatId, await getLastTenGames())
+        raptorsTelegramBot.sendMessage(chatId, await getLastTenGames(), {parse_mode : "Markdown"})
     }
 });
