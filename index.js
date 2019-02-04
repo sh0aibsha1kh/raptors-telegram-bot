@@ -47,8 +47,12 @@ async function getNLastGames(n) {
     return output;
 }
 
-raptorsTelegramBot.onText(/\/last (\d*)/, async (msg, match) => {
+raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
-    raptorsTelegramBot.sendMessage(chatId, await getNLastGames(match[1]), { parse_mode: 'Markdown' });
-
+    const number = parseInt(match[1], 10);
+    if (number <= 0 || isNaN(number)) {
+        raptorsTelegramBot.sendMessage(chatId, await getNLastGames(1), { parse_mode: 'markdown' });
+    } else {
+        raptorsTelegramBot.sendMessage(chatId, await getNLastGames(number), { parse_mode: 'markdown' });
+    }
 });
