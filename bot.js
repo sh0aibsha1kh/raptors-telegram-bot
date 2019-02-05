@@ -42,7 +42,7 @@ raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
 
 raptorsTelegramBot.on('message', async msg => {
     const chatId = msg.chat.id;
-    if (msg.text = '/next') {
+    if (msg.text === '/next') {
         raptorsTelegramBot.sendMessage(chatId, await getNextGame(), { parse_mode: 'markdown' });
     }
 });
