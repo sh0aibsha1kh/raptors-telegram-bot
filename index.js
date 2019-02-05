@@ -22,6 +22,20 @@ async function getScoreData() {
     return parsedData;
 }
 
+async function getDateData() {
+    const html = await rp(URL);
+    const unparsedData = $('.date', html)
+    let parsedData = [];
+    unparsedData.each((index, element) => {
+        parsedData.push($(element).text());
+    });
+    parsedData = parsedData.map(e => {
+        const len = e.length;
+        return `${e.slice(len - 11, len - 1)} 2019`;
+    })
+    return parsedData
+}
+
 async function getTeamData() {
     const html = await rp(URL);
     const unparsedData = $('img.logo', html);
