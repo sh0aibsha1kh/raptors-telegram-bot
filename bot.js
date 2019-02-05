@@ -26,12 +26,11 @@ async function getNextGame() {
     const dates = await getDates();
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
-    let output = `RAPTORS vs ${teams[scoreLength]}`
+    let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}`;
     return output;
 }
 
 raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
-    console.log(await getTimes());
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
     if (number <= 0 || isNaN(number)) {
@@ -44,7 +43,6 @@ raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
 raptorsTelegramBot.on('message', async msg => {
     const chatId = msg.chat.id;
     if (msg.text = '/next') {
-        console.log('HERE');
         raptorsTelegramBot.sendMessage(chatId, await getNextGame(), { parse_mode: 'markdown' });
     }
 });
