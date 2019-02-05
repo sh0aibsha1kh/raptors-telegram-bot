@@ -43,8 +43,36 @@ const getOpponents = async () => {
     return parsedData;
 }
 
+const getTimes = async () => {
+    const html = await rp(URL);
+    const unparsedData = $('.event_time', html);
+    const pastGamesLength = (await getScores()).length;
+    let parsedData = [];
+    unparsedData.each((index, element) => {
+        parsedData.push($(element).text());
+    });
+    
+    parsedData = parsedData.slice(pastGamesLength).map(unparsedTime => {
+        let parsedTime = '';
+        let i = 0;
+        while(unparsedTime[i] !== 'm'){
+            parsedTime += unparsedTime[i];
+            i += 1;
+        }
+        parsedTime += 'm ';
+        i += 1;
+        while(i < unparsedTime.length){
+            parsedTime += unparsedTime[i];
+            i += 1;
+        }
+        return parsedTime;
+    });
+    return parsedData;
+}
+
 module.exports = {
     getDates,
     getOpponents,
-    getScores
+    getScores,
+    getTimes
 }

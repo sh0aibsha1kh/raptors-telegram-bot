@@ -1,6 +1,6 @@
 const TelegramBotAPI = require('node-telegram-bot-api');
 const { TOKEN } = require('./private/credentials');
-const { getDates, getOpponents, getScores } = require('./data/parser');
+const { getDates, getOpponents, getScores, getTimes } = require('./data/parser');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
 
@@ -21,12 +21,30 @@ async function getNLastGames(n) {
     return output;
 }
 
+async function getNextGame() {
+    const teams = await getOpponents();
+    const dates = await getDates();
+    const times = await getTimes();
+    const scoreLength = (await getScores()).length;
+    let output = `RAPTORS vs ${teams[scoreLength]}`
+    return output;
+}
+
 raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
+    console.log(await getTimes());
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
     if (number <= 0 || isNaN(number)) {
         raptorsTelegramBot.sendMessage(chatId, await getNLastGames(1), { parse_mode: 'markdown' });
     } else {
         raptorsTelegramBot.sendMessage(chatId, await getNLastGames(number), { parse_mode: 'markdown' });
+    }
+});
+
+raptorsTelegramBot.on('message', async msg => {
+    const chatId = msg.chat.id;
+    if (msg.text = '/next') {
+        console.log('HERE');
+        raptorsTelegramBot.sendMessage(chatId, await getNextGame(), { parse_mode: 'markdown' });
     }
 });
