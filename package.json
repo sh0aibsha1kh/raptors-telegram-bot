@@ -4,7 +4,7 @@
   "description": "This telegram bot will be used to fetch game stats for the Toronto Raptors",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
