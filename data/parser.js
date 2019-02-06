@@ -3,7 +3,7 @@ const $ = require('cheerio');
 const puppeteer = require('puppeteer');
 const { URL, LIVE } = require('../private/credentials');
 
-const getLiveScore = async () => {
+const getLiveInfo = async () => {
     return puppeteer.launch().then(browser => {
         return browser.newPage();
     }).then(page => {
@@ -11,7 +11,18 @@ const getLiveScore = async () => {
             return page.content();
         });
     }).then(html => {
-        return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS`;
+        return `RAPTORS     ${$('.score-left', html).text()}-${$('.score-right', html).text()}     OPPONENTS\n_${$('.livegame_status', html).text().slice(1, 8)}_\n`;
+    });
+}
+
+const getLiveScore = async () => {
+    return puppeteer.launch().then(browser => {
+        return browser.newPage();
+    }).then(async page => {
+        await page.goto(LIVE);
+        return page.content();
+    }).then(html => {
+        return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS\n`;
     });
 }
 
@@ -65,6 +76,9 @@ const getTimes = async () => {
     });
 
     parsedData = parsedData.slice(pastGamesLength).map(unparsedTime => {
+        if (unparsedTime === 'Live Now'){
+            return '*LIVE NOW*\n';
+        }
         let parsedTime = '';
         let i = 0;
         while (unparsedTime[i] !== 'm') {
@@ -87,5 +101,6 @@ module.exports = {
     getOpponents,
     getScores,
     getTimes,
-    getLiveScore
+    getLiveScore,
+    getLiveInfo
 }

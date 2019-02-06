@@ -1,11 +1,11 @@
 const TelegramBotAPI = require('node-telegram-bot-api');
 const { TOKEN } = require('./private/credentials');
-const { getDates, getOpponents, getScores, getTimes, getLiveScore } = require('./data/parser');
+const { getDates, getOpponents, getScores, getTimes, getLiveScore, getLiveInfo } = require('./data/parser');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
 
 async function getNLastGames(n) {
-    const start = new Date().getTime()
+    const start = new Date().getTime();
     const scores = await getScores();
     const teams = await getOpponents();
     const dates = await getDates();
@@ -14,31 +14,30 @@ async function getNLastGames(n) {
         let individualScores = scores[i].split('-');
         output += `${dates[i]}\n`;
         if (parseInt(individualScores[0], 10) > parseInt(individualScores[1], 10)) {
-            output += `*RAPTORS*    ${scores[i]}    ${teams[i]}\n\n`;
+            output += `*RAPTORS*    ${scores[i]}    ${teams[i]}\n`;
         } else {
-            output += `RAPTORS    ${scores[i]}    *${teams[i]}*\n\n`;
+            output += `RAPTORS    ${scores[i]}    *${teams[i]}*\n`;
         }
     }
-    const end = new Date().getTime()
-    return output + `\n\n \`Fetched in ${(end - start) / 1000} seconds\``;;
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
 
 async function getNextGame() {
-    const start = new Date().getTime()
+    const start = new Date().getTime();
     const teams = await getOpponents();
     const dates = await getDates();
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
     let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}`;
-    const end = new Date().getTime()
-    return output + `\n\n \`Fetched in ${(end - start) / 1000} seconds\``;;
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
 
 async function getLiveUpdate() {
     const start = new Date().getTime();
-    let output = await getLiveScore();
-    const end = new Date().getTime()
-    return output + `\n\n \`Fetched in ${(end - start) / 1000} seconds\``;
+    let output = await getLiveInfo();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
 raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
@@ -56,10 +55,6 @@ raptorsTelegramBot.on('message', async msg => {
     if (msg.text === '/next') {
         raptorsTelegramBot.sendMessage(chatId, await getNextGame(), { parse_mode: 'markdown' });
     }
-});
-
-raptorsTelegramBot.on('message', async msg => {
-    const chatId = msg.chat.id;
     if (msg.text === '/live') {
         raptorsTelegramBot.sendMessage(chatId, await getLiveUpdate(), { parse_mode: 'markdown' });
     }

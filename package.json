@@ -1,8 +1,8 @@
 {
   "name": "raptors-telegram-bot",
   "version": "1.0.0",
-  "description": "This telegram bot will be used to fetch game stats for the Toronto Raptors",
-  "main": "index.js",
+  "description": "This telegram bot will be used to fetch stats for the Toronto Raptors",
+  "main": "bot.js",
   "scripts": {
     "start": "nodemon bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,8 +11,15 @@
     "type": "git",
     "url": "git+https://github.com/sh0aibsha1kh/raptors-telegram-bot.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "toronto",
+    "raptors",
+    "bot",
+    "telegram",
+    "nba",
+    "basketball"
+  ],
+  "author": "Shoaib Shaikh",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/sh0aibsha1kh/raptors-telegram-bot/issues"
