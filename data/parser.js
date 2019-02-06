@@ -1,7 +1,19 @@
 const rp = require('request-promise');
 const $ = require('cheerio');
 const puppeteer = require('puppeteer');
-const { URL } = require('../private/credentials');
+const { URL, LIVE } = require('../private/credentials');
+
+const getLiveScore = async () => {
+    return puppeteer.launch().then(browser => {
+        return browser.newPage();
+    }).then(page => {
+        return page.goto(LIVE).then(() => {
+            return page.content();
+        });
+    }).then(html => {
+        return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS`;
+    });
+}
 
 const getScores = async () => {
     const html = await rp(URL);
@@ -51,17 +63,17 @@ const getTimes = async () => {
     unparsedData.each((index, element) => {
         parsedData.push($(element).text());
     });
-    
+
     parsedData = parsedData.slice(pastGamesLength).map(unparsedTime => {
         let parsedTime = '';
         let i = 0;
-        while(unparsedTime[i] !== 'm'){
+        while (unparsedTime[i] !== 'm') {
             parsedTime += unparsedTime[i];
             i += 1;
         }
         parsedTime += 'm ';
         i += 1;
-        while(i < unparsedTime.length){
+        while (i < unparsedTime.length) {
             parsedTime += unparsedTime[i];
             i += 1;
         }
@@ -74,5 +86,6 @@ module.exports = {
     getDates,
     getOpponents,
     getScores,
-    getTimes
+    getTimes,
+    getLiveScore
 }
