@@ -11,4 +11,5 @@ This telegram bot will be used to fetch game stats for the Toronto Raptors
 5. ~~Implement live game updates~~
 6. Dynamically update live game URL and related information
 7. Organize code by moving similar methods into folders
-8. Add documentation
+8. Host bot on heroku
+9. Add documentation
