@@ -1,6 +1,6 @@
 const TelegramBotAPI = require('node-telegram-bot-api');
 const { TOKEN } = require('./private/credentials');
-const { getDates, getOpponents, getScores, getTimes, getLiveScore, getLiveInfo } = require('./data/parser');
+const { getDates, getOpponents, getScores, getTimes } = require('./data/parser');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
 
@@ -34,11 +34,12 @@ async function getNextGame() {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
 
-async function getLiveUpdate() {
-    const start = new Date().getTime();
-    let output = await getLiveInfo();
-    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
-}
+// TODO: live doesn't work on heroku due to a puppeteer related error
+// async function getLiveUpdate() {
+//     const start = new Date().getTime();
+//     let output = await getLiveInfo();
+//     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
+// }
 
 raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
@@ -55,7 +56,8 @@ raptorsTelegramBot.on('message', async msg => {
     if (msg.text === '/next') {
         raptorsTelegramBot.sendMessage(chatId, await getNextGame(), { parse_mode: 'markdown' });
     }
-    if (msg.text === '/live') {
-        raptorsTelegramBot.sendMessage(chatId, await getLiveUpdate(), { parse_mode: 'markdown' });
-    }
+    // TODO: live doesn't work on heroku due to a puppeteer related error
+    // if (msg.text === '/live') {
+    //     raptorsTelegramBot.sendMessage(chatId, await getLiveUpdate(), { parse_mode: 'markdown' });
+    // }
 });

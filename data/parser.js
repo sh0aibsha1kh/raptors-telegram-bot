@@ -1,30 +1,31 @@
 const rp = require('request-promise');
 const $ = require('cheerio');
-const puppeteer = require('puppeteer');
-const { URL, LIVE } = require('../private/credentials');
+// const puppeteer = require('puppeteer');
+const { URL } = require('../private/credentials');
 
-const getLiveInfo = async () => {
-    return puppeteer.launch().then(browser => {
-        return browser.newPage();
-    }).then(page => {
-        return page.goto(LIVE).then(() => {
-            return page.content();
-        });
-    }).then(html => {
-        return `RAPTORS     ${$('.score-left', html).text()}-${$('.score-right', html).text()}     OPPONENTS\n_${$('.livegame_status', html).text().slice(1, 8)}_\n`;
-    });
-}
+// TODO: live doesn't work on heroku due to a puppeteer related error
+// const getLiveInfo = async () => {
+//     return puppeteer.launch().then(browser => {
+//         return browser.newPage();
+//     }).then(page => {
+//         return page.goto(LIVE).then(() => {
+//             return page.content();
+//         });
+//     }).then(html => {
+//         return `RAPTORS     ${$('.score-left', html).text()}-${$('.score-right', html).text()}     OPPONENTS\n_${$('.livegame_status', html).text().slice(1, 8)}_\n`;
+//     });
+// }
 
-const getLiveScore = async () => {
-    return puppeteer.launch().then(browser => {
-        return browser.newPage();
-    }).then(async page => {
-        await page.goto(LIVE);
-        return page.content();
-    }).then(html => {
-        return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS\n`;
-    });
-}
+// const getLiveScore = async () => {
+//     return puppeteer.launch().then(browser => {
+//         return browser.newPage();
+//     }).then(async page => {
+//         await page.goto(LIVE);
+//         return page.content();
+//     }).then(html => {
+//         return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS\n`;
+//     });
+// }
 
 const getScores = async () => {
     const html = await rp(URL);
@@ -76,7 +77,7 @@ const getTimes = async () => {
     });
 
     parsedData = parsedData.slice(pastGamesLength).map(unparsedTime => {
-        if (unparsedTime === 'Live Now'){
+        if (unparsedTime === 'Live Now') {
             return '*LIVE NOW*\n';
         }
         let parsedTime = '';
@@ -101,6 +102,6 @@ module.exports = {
     getOpponents,
     getScores,
     getTimes,
-    getLiveScore,
-    getLiveInfo
+    // getLiveScore,
+    // getLiveInfo
 }
