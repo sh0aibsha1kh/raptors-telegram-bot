@@ -29,7 +29,7 @@ async function getNextGame() {
     const dates = await getDates();
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
-    let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}`;
+    let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}\n`;
     const end = new Date().getTime();
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
