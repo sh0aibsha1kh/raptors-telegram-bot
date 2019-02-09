@@ -9,7 +9,8 @@ This telegram bot will be used to fetch game stats for the Toronto Raptors
 3. ~~Configure commands for telegram bot to fetch data~~
 4. ~~Implement additional methods to retrieve more/better data~~
 5. ~~Implement live game updates~~
-6. Dynamically update live game URL and related information
+6. ~Host bot on heroku~
 7. Organize code by moving similar methods into folders
-8. Host bot on heroku
-9. Add documentation
+8. Fix heroku crashes for simple requests
+9. Configure puppeteer to run on heroku
+10. Add documentation
