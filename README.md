@@ -14,3 +14,4 @@ This telegram bot will be used to fetch game stats for the Toronto Raptors
 8. Fix heroku crashes for simple requests
 9. Configure puppeteer to run on heroku
 10. Add documentation
+11. Edit bot settings through BotFather
