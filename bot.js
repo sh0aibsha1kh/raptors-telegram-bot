@@ -7,7 +7,7 @@ const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { polling: true });
 raptorsTelegramBot.onText(/\/last(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
-    console.log("HELLO " + await getNumberOfGamesPlayed())
+    console.log("HELLO " + await getNumberOfGamesPlayed());
     if (number <= 0 || isNaN(number) || number > await getNumberOfGamesPlayed()) {
         raptorsTelegramBot.sendMessage(chatId, await getNLastGames(1), { parse_mode: 'markdown' });
     } else {
