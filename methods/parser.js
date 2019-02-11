@@ -1,31 +1,38 @@
 const rp = require('request-promise');
 const $ = require('cheerio');
-// const puppeteer = require('puppeteer');
 const { URL } = require('../private/credentials');
 
-// TODO: live doesn't work on heroku due to a puppeteer related error
-// const getLiveInfo = async () => {
-//     return puppeteer.launch().then(browser => {
-//         return browser.newPage();
-//     }).then(page => {
-//         return page.goto(LIVE).then(() => {
-//             return page.content();
-//         });
-//     }).then(html => {
-//         return `RAPTORS     ${$('.score-left', html).text()}-${$('.score-right', html).text()}     OPPONENTS\n_${$('.livegame_status', html).text().slice(1, 8)}_\n`;
-//     });
-// }
+const getNLastGames = async n => {
+    const start = new Date().getTime();
+    const scores = await getScores();
+    const teams = await getOpponents();
+    const dates = await getDates();
+    let output = `_Last${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
+    for (i = scores.length - n; i < scores.length; i++) {
+        let individualScores = scores[i].split('-');
+        output += `${dates[i]}\n`;
+        if (parseInt(individualScores[0], 10) > parseInt(individualScores[1], 10)) {
+            output += `*RAPTORS*    ${scores[i]}    ${teams[i]}\n`;
+        } else {
+            output += `RAPTORS    ${scores[i]}    *${teams[i]}*\n`;
+        }
+    }
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
+}
 
-// const getLiveScore = async () => {
-//     return puppeteer.launch().then(browser => {
-//         return browser.newPage();
-//     }).then(async page => {
-//         await page.goto(LIVE);
-//         return page.content();
-//     }).then(html => {
-//         return `RAPTORS ${$('.score-left', html).text()}-${$('.score-right', html).text()} 76ERS\n`;
-//     });
-// }
+const getNextGame = async () => {
+    const start = new Date().getTime();
+    const teams = await getOpponents();
+    const dates = await getDates();
+    const times = await getTimes();
+    const scoreLength = (await getScores()).length;
+    let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}\n`;
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
+}
+
+/* ========== SCRAPERS ========== */
 
 const getScores = async () => {
     const html = await rp(URL);
@@ -98,10 +105,6 @@ const getTimes = async () => {
 }
 
 module.exports = {
-    getDates,
-    getOpponents,
-    getScores,
-    getTimes,
-    // getLiveScore,
-    // getLiveInfo
+    getNextGame,
+    getNLastGames,
 }
