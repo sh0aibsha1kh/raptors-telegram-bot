@@ -22,7 +22,7 @@ const getNLastGames = async n => {
 }
 
 const getNumberOfGamesPlayed  = async () => {
-    const numberOfGamesPlayed = await getScores().length;
+    const numberOfGamesPlayed = (await getScores()).length;
     return numberOfGamesPlayed;
 }
 
