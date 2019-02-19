@@ -5,7 +5,7 @@ const { getNextGame, getNLastGames, getNumberOfGamesPlayed } = require('./method
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { webHook: { port: PORT, host: HOST } });
 raptorsTelegramBot.setWebHook(`${SERVER_URL}:443/bot${TOKEN}`);
 
-raptorsTelegramBot.onText(/\/last\s+(\d*)/, async (msg, match) => {
+raptorsTelegramBot.onText(/\/last\s*(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
     if (number <= 0 || isNaN(number) || number > await getNumberOfGamesPlayed()) {
