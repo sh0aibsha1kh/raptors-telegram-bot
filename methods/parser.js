@@ -69,6 +69,10 @@ const getDates = async () => {
     return parsedData;
 }
 
+/**
+ * Return an array of all of the opponents that the Toronto Raptors will be
+ * facing this season in order.
+ */
 const getOpponents = async () => {
     const html = await rp(RAPTORS_URL);
     const unparsedData = $('img.logo', html);
