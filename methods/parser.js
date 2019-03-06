@@ -2,7 +2,7 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 const { RAPTORS_URL } = require('../private/credentials');
 
-const getNLastGames = async n => {
+const getLastNGames = async n => {
     const start = new Date().getTime();
     const scores = await getScores();
     const teams = await getOpponents();
@@ -21,18 +21,27 @@ const getNLastGames = async n => {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
 
-const getNumberOfGamesPlayed  = async () => {
+const getNumberOfGamesPlayed = async () => {
     const numberOfGamesPlayed = (await getScores()).length;
     return numberOfGamesPlayed;
 }
 
-const getNextGame = async () => {
+const getNumberOfGamesRemaining = async () => {
+    const total = (await getOpponents()).length;
+    const gamesPlayed = await getNumberOfGamesPlayed();
+    return total - gamesPlayed;
+}
+
+const getNextNGames = async n => {
     const start = new Date().getTime();
     const teams = await getOpponents();
     const dates = await getDates();
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
-    let output = `RAPTORS vs ${teams[scoreLength]} on ${dates[scoreLength]} @ ${times[0]}\n`;
+    let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
+    for(i = 0; i < n; i++) {
+        output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
+    }
     const end = new Date().getTime();
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
@@ -114,7 +123,8 @@ const getTimes = async () => {
 }
 
 module.exports = {
-    getNextGame,
-    getNLastGames,
-    getNumberOfGamesPlayed
+    getNextNGames,
+    getLastNGames,
+    getNumberOfGamesPlayed,
+    getNumberOfGamesRemaining
 }
