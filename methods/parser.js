@@ -33,7 +33,7 @@ const getNextNGames = async n => {
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
     let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
-    for(i = 0; i < scoreLength; i++) {
+    for(i = 0; i < n; i++) {
         output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
     }
     const end = new Date().getTime();
