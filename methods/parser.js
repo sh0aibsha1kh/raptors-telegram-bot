@@ -21,9 +21,15 @@ const getLastNGames = async n => {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
 }
 
-const getNumberOfGamesPlayed  = async () => {
+const getNumberOfGamesPlayed = async () => {
     const numberOfGamesPlayed = (await getScores()).length;
     return numberOfGamesPlayed;
+}
+
+const getNumberOfGamesRemaining = async () => {
+    const total = (await getOpponents()).length;
+    const gamesPlayed = await getNumberOfGamesPlayed();
+    return total - gamesPlayed;
 }
 
 const getNextNGames = async n => {
@@ -119,5 +125,6 @@ const getTimes = async () => {
 module.exports = {
     getNextNGames,
     getLastNGames,
-    getNumberOfGamesPlayed
+    getNumberOfGamesPlayed,
+    getNumberOfGamesRemaining
 }
