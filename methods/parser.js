@@ -2,6 +2,14 @@ const rp = require('request-promise');
 const $ = require('cheerio');
 const { RAPTORS_URL } = require('../private/credentials');
 
+/**
+ * Returns a list of n previous games if n is valid (meaning that there are
+ * at least n previous games that were played). If n is invalid, it defaults to
+ * returning just the last game. The returned string is Markdown compatible.
+ * 
+ * @param {number} n The number of previous games to be retrieved.
+ * @returns {string}
+ */
 const getLastNGames = async n => {
     const start = new Date().getTime();
     const scores = await getScores();
@@ -32,6 +40,14 @@ const getNumberOfGamesRemaining = async () => {
     return total - gamesPlayed;
 }
 
+/**
+ * Returns a list of n next games if n is valid (meaning that there are
+ * at least n next games to be played). If n is invalid, it defaults to
+ * returning just the next game. The returned string is Markdown compatible.
+ * 
+ * @param {number} n The number of next games to be retrieved.
+ * @returns {string}
+ */
 const getNextNGames = async n => {
     const start = new Date().getTime();
     const teams = await getOpponents();
@@ -39,7 +55,7 @@ const getNextNGames = async n => {
     const times = await getTimes();
     const scoreLength = (await getScores()).length;
     let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
-    for(i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
     }
     const end = new Date().getTime();
