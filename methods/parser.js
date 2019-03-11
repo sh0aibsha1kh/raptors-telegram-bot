@@ -64,8 +64,10 @@ const getNextNGames = async n => {
 
 /* ========== SCRAPERS ========== */
 
-const getStandings = async () => {
+const getPlayoffMatchups = async () => {
     const html = await rp(REFERENCE_URL);
+    const unparsedData = $('.standings_confs tbody .left', html);
+    return unparsedData
 }
 
 const getScores = async () => {
@@ -146,5 +148,6 @@ module.exports = {
     getNextNGames,
     getLastNGames,
     getNumberOfGamesPlayed,
-    getNumberOfGamesRemaining
+    getNumberOfGamesRemaining,
+    getPlayoffMatchups
 }
