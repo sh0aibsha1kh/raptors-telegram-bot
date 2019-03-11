@@ -68,7 +68,7 @@ const getPlayoffMatchups = async () => {
     let output = "_Tentative Playoff Matchups_*\n\n";
     for (let i = 0; i < standings.length; i++) {
         if (standings[i] == "Toronto Raptors") {
-            standings[i] == "*TORONTO RAPTORS*";
+            standings[i] = "*TORONTO RAPTORS*";
             break;
         }
     }
