@@ -27,8 +27,6 @@ raptorsTelegramBot.onText(/\/next\s?(\d*)/, async (msg, match) => {
 
 raptorsTelegramBot.onText(/\/playoffs/, async (msg, match) => {
     const chatId = msg.chat.id;
-    raptorsTelegramBot.sendMessage(chatId, "HELLO", { parse_mode: 'markdown' });
     const temp = await getPlayoffMatchups();
-    console.log(typeof(temp));
-    console.log(temp);
+    raptorsTelegramBot.sendMessage(chatId, temp, { parse_mode: 'markdown' });
 });

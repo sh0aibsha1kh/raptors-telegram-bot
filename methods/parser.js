@@ -26,7 +26,7 @@ const getLastNGames = async n => {
         }
     }
     const end = new Date().getTime();
-    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
 const getNumberOfGamesPlayed = async () => {
@@ -59,12 +59,25 @@ const getNextNGames = async n => {
         output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
     }
     const end = new Date().getTime();
-    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;;
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
+}
+
+const getPlayoffMatchups = async () => {
+    const start = new Date().getTime();
+    const standings = await getStandings();
+    let output = "Tentative Playoff Matchups\n\n";
+    output += "Eastern Conference\n";
+    output += `1. ${standings[0]} vs 8. ${standings[7]}\n`
+    output += `2. ${standings[1]} vs 7. ${standings[6]}\n`
+    output += `3. ${standings[2]} vs 6. ${standings[5]}\n`
+    output += `4. ${standings[3]} vs 5. ${standings[4]}\n`
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
 /* ========== SCRAPERS ========== */
 
-const getPlayoffMatchups = async () => {
+const getStandings = async () => {
     const html = await rp(REFERENCE_URL);
     const unparsedData = $('.standings_confs tbody .left a', html);
     let parsedData = [];
