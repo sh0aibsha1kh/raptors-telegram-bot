@@ -65,7 +65,7 @@ const getNextNGames = async n => {
 const getPlayoffMatchups = async () => {
     const start = new Date().getTime();
     const standings = await getStandings();
-    let output = "_Tentative Playoff Matchups_*\n\n";
+    let output = "_Tentative Playoff Matchups_\n\n";
     for (let i = 0; i < standings.length; i++) {
         if (standings[i] == "Toronto Raptors") {
             standings[i] = "*TORONTO RAPTORS*";
