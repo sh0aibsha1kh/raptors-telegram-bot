@@ -66,8 +66,14 @@ const getNextNGames = async n => {
 
 const getPlayoffMatchups = async () => {
     const html = await rp(REFERENCE_URL);
-    const unparsedData = $('.standings_confs tbody .left', html).text();
-    return unparsedData
+    const unparsedData = $('.standings_confs tbody .left a', html);
+    let parsedData = [];
+
+    unparsedData.each((index, element) => {
+        parsedData.push($(element).text());
+    });
+
+    return parsedData
 }
 
 const getScores = async () => {
