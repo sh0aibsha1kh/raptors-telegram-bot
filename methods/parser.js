@@ -65,12 +65,24 @@ const getNextNGames = async n => {
 const getPlayoffMatchups = async () => {
     const start = new Date().getTime();
     const standings = await getStandings();
-    let output = "Tentative Playoff Matchups\n\n";
-    output += "Eastern Conference\n";
+    let output = "_Tentative Playoff Matchups_*\n\n";
+    for (let i = 0; i < standings.length; i++) {
+        if (standings[i] == "Toronto Raptors") {
+            standings[i] == "*TORONTO RAPTORS*";
+            break;
+        }
+    }
+    output += "`Eastern Conference`\n";
     output += `1. ${standings[0]} vs 8. ${standings[7]}\n`
     output += `2. ${standings[1]} vs 7. ${standings[6]}\n`
     output += `3. ${standings[2]} vs 6. ${standings[5]}\n`
-    output += `4. ${standings[3]} vs 5. ${standings[4]}\n`
+    output += `4. ${standings[3]} vs 5. ${standings[4]}\n\n`
+
+    output += "`Western Conference`\n";
+    output += `1. ${standings[15]} vs 8. ${standings[22]}\n`
+    output += `2. ${standings[16]} vs 7. ${standings[21]}\n`
+    output += `3. ${standings[17]} vs 6. ${standings[20]}\n`
+    output += `4. ${standings[18]} vs 5. ${standings[19]}\n`
     const end = new Date().getTime();
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
