@@ -100,14 +100,14 @@ const getStandings = async () => {
     }
 
     output += "`Eastern Conference`\n";
-    while(index < 15){
-        output += `${i+1}. ${standings[index]}\n`;
+    while (index < 15) {
+        output += `${index + 1}. ${standings[index]}\n`;
         index++;
     }
 
     output += "\n`Western Conference`\n";
-    while(index < 30){
-        output += `${i+1-15}. ${standings[index]}\n`;
+    while (index < 30) {
+        output += `${index + 1 - 15}. ${standings[index]}\n`;
         index++;
     }
 
