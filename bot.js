@@ -1,6 +1,6 @@
 const TelegramBotAPI = require('node-telegram-bot-api');
 const { TOKEN, PORT, HOST, SERVER_URL } = require('./private/credentials');
-const { getNextNGames, getLastNGames, getNumberOfGamesPlayed, getNumberOfGamesRemaining, getPlayoffMatchups } = require('./methods/parser');
+const { getNextNGames, getLastNGames, getNumberOfGamesPlayed, getNumberOfGamesRemaining, getPlayoffMatchups, getStandings } = require('./methods/parser');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { webHook: { port: PORT, host: HOST } });
 raptorsTelegramBot.setWebHook(`${SERVER_URL}:443/bot${TOKEN}`);
@@ -27,6 +27,10 @@ raptorsTelegramBot.onText(/\/next\s?(\d*)/, async (msg, match) => {
 
 raptorsTelegramBot.onText(/\/playoffs/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const temp = await getPlayoffMatchups();
-    raptorsTelegramBot.sendMessage(chatId, temp, { parse_mode: 'markdown' });
+    raptorsTelegramBot.sendMessage(chatId, await getPlayoffMatchups(), { parse_mode: 'markdown' });
+});
+
+raptorsTelegramBot.onText(/\/standings/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    raptorsTelegramBot.sendMessage(chatId, await getStandings(), { parse_mode: 'markdown' });
 });

@@ -12,9 +12,9 @@ const { RAPTORS_URL, REFERENCE_URL } = require('../private/credentials');
  */
 const getLastNGames = async n => {
     const start = new Date().getTime();
-    const scores = await getScores();
-    const teams = await getOpponents();
-    const dates = await getDates();
+    const scores = await scrapeScores();
+    const teams = await scrapeOpponents();
+    const dates = await scrapeDates();
     let output = `_Last${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
     for (i = scores.length - n; i < scores.length; i++) {
         let individualScores = scores[i].split('-');
@@ -30,12 +30,12 @@ const getLastNGames = async n => {
 }
 
 const getNumberOfGamesPlayed = async () => {
-    const numberOfGamesPlayed = (await getScores()).length;
+    const numberOfGamesPlayed = (await scrapeScores()).length;
     return numberOfGamesPlayed;
 }
 
 const getNumberOfGamesRemaining = async () => {
-    const total = (await getOpponents()).length;
+    const total = (await scrapeOpponents()).length;
     const gamesPlayed = await getNumberOfGamesPlayed();
     return total - gamesPlayed;
 }
@@ -50,10 +50,10 @@ const getNumberOfGamesRemaining = async () => {
  */
 const getNextNGames = async n => {
     const start = new Date().getTime();
-    const teams = await getOpponents();
-    const dates = await getDates();
-    const times = await getTimes();
-    const scoreLength = (await getScores()).length;
+    const teams = await scrapeOpponents();
+    const dates = await scrapeDates();
+    const times = await scrapeTimes();
+    const scoreLength = (await scrapeScores()).length;
     let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
     for (i = 0; i < n; i++) {
         output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
@@ -64,7 +64,7 @@ const getNextNGames = async n => {
 
 const getPlayoffMatchups = async () => {
     const start = new Date().getTime();
-    const standings = await getStandings();
+    const standings = await scrapeStandings();
     let output = "_Tentative Playoff Matchups_\n\n";
     for (let i = 0; i < standings.length; i++) {
         if (standings[i] == "Toronto Raptors") {
@@ -87,9 +87,37 @@ const getPlayoffMatchups = async () => {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
+const getStandings = async () => {
+    const start = new Date().getTime();
+    const standings = await scrapeStandings();
+    let output = "_Conference Standings_\n\n";
+    let index = 0;
+    for (let i = 0; i < standings.length; i++) {
+        if (standings[i] == "Toronto Raptors") {
+            standings[i] = "*TORONTO RAPTORS*";
+            break;
+        }
+    }
+
+    output += "`Eastern Conference`\n";
+    while(index < 15){
+        output += `${i+1}. ${standings[i]}\n`;
+        index++;
+    }
+
+    output += "\n`Western Conference`\n";
+    while(index < 30){
+        output += `${i+1-15}. ${standings[i]}\n`;
+        index++;
+    }
+
+    const end = new Date().getTime();
+    return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
+}
+
 /* ========== SCRAPERS ========== */
 
-const getStandings = async () => {
+const scrapeStandings = async () => {
     const html = await rp(REFERENCE_URL);
     const unparsedData = $('.standings_confs tbody .left a', html);
     let parsedData = [];
@@ -101,7 +129,7 @@ const getStandings = async () => {
     return parsedData
 }
 
-const getScores = async () => {
+const scrapeScores = async () => {
     const html = await rp(RAPTORS_URL);
     const unparsedData = $('.game-status__past', html).text().split(' ');
     let parsedData = [];
@@ -117,7 +145,7 @@ const getScores = async () => {
     return parsedData;
 }
 
-const getDates = async () => {
+const scrapeDates = async () => {
     const html = await rp(RAPTORS_URL);
     const unparsedData = $('.date', html);
     let parsedData = [];
@@ -135,7 +163,7 @@ const getDates = async () => {
  * Return an array of all of the opponents that the Toronto Raptors will be
  * facing this season in order.
  */
-const getOpponents = async () => {
+const scrapeOpponents = async () => {
     const html = await rp(RAPTORS_URL);
     const unparsedData = $('img.logo', html);
     let parsedData = [];
@@ -145,10 +173,10 @@ const getOpponents = async () => {
     return parsedData;
 }
 
-const getTimes = async () => {
+const scrapeTimes = async () => {
     const html = await rp(RAPTORS_URL);
     const unparsedData = $('.event_time', html);
-    const pastGamesLength = (await getScores()).length;
+    const pastGamesLength = (await scrapeScores()).length;
     let parsedData = [];
     unparsedData.each((index, element) => {
         parsedData.push($(element).text());
@@ -180,5 +208,6 @@ module.exports = {
     getLastNGames,
     getNumberOfGamesPlayed,
     getNumberOfGamesRemaining,
-    getPlayoffMatchups
+    getPlayoffMatchups,
+    getStandings
 }
