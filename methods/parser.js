@@ -57,7 +57,7 @@ const getNextNGames = async n => {
     const locations = await scrapeLocations();
     let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
     for (i = 0; i < n; i++) {
-        console.log(locations[scoreLength + 1]);
+        console.log(locations[scoreLength + i]);
         if (locations[scoreLength + i] === 'SCOTIABANK ARENA, TORONTO, ON') {
             output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
         } else {
