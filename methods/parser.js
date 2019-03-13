@@ -54,9 +54,14 @@ const getNextNGames = async n => {
     const dates = await scrapeDates();
     const times = await scrapeTimes();
     const scoreLength = (await scrapeScores()).length;
+    const locations = await scrapeLocations();
     let output = `_Next${n > 1 ? ' ' + n + ' ' : ' '}Game${n > 1 ? 's' : ''}_: \n\n`;
     for (i = 0; i < n; i++) {
-        output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
+        if (locations[scoreLength + i] === 'SCOTIABANK ARENA, TORONTO, ON') {
+            output += `RAPTORS vs ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
+        } else {
+            output += `RAPTORS @ ${teams[scoreLength + i]} on ${dates[scoreLength + i]} @ ${times[i]}\n`;
+        }
     }
     const end = new Date().getTime();
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
@@ -169,6 +174,16 @@ const scrapeOpponents = async () => {
     let parsedData = [];
     unparsedData.each((index, element) => {
         parsedData.push($(element).attr('alt').toUpperCase());
+    });
+    return parsedData;
+}
+
+const scrapeLocations = async () => {
+    const html = await rp(RAPTORS_URL);
+    const unparsedData = $('span.arena', html);
+    let parsedData = [];
+    unparsedData.each((index, element) => {
+        parsedData.push($(element).text());
     });
     return parsedData;
 }
