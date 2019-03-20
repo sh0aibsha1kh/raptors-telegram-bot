@@ -8,8 +8,11 @@ raptorsTelegramBot.setWebHook(`${SERVER_URL}:443/bot${TOKEN}`);
 raptorsTelegramBot.onText(/\/last\s?(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
-    if (number <= 0 || isNaN(number) || number > await getNumberOfGamesPlayed()) {
+    const gamesPlayed = await getNumberOfGamesPlayed();
+    if (number <= 0 || isNaN(number)) {
         raptorsTelegramBot.sendMessage(chatId, await getLastNGames(1), { parse_mode: 'markdown' });
+    } else if (number > gamesPlayed) {
+        raptorsTelegramBot.sendMessage(chatId, await getLastNGames(gamesPlayed), { parse_mode: 'markdown' });
     } else {
         raptorsTelegramBot.sendMessage(chatId, await getLastNGames(number), { parse_mode: 'markdown' });
     }
@@ -18,8 +21,11 @@ raptorsTelegramBot.onText(/\/last\s?(\d*)/, async (msg, match) => {
 raptorsTelegramBot.onText(/\/next\s?(\d*)/, async (msg, match) => {
     const chatId = msg.chat.id;
     const number = parseInt(match[1], 10);
-    if (number <= 0 || isNaN(number) || number > await getNumberOfGamesRemaining()) {
+    const gamesRemaining = await getNumberOfGamesRemaining();
+    if (number <= 0 || isNaN(number)) {
         raptorsTelegramBot.sendMessage(chatId, await getNextNGames(1), { parse_mode: 'markdown' });
+    } else if (number > gamesRemaining) {
+        raptorsTelegramBot.sendMessage(chatId, await getNextNGames(gamesRemaining), { parse_mode: 'markdown' });
     } else {
         raptorsTelegramBot.sendMessage(chatId, await getNextNGames(number), { parse_mode: 'markdown' });
     }
