@@ -1,6 +1,6 @@
 # raptors-telegram-bot
 
-This telegram bot will be used to fetch game stats for the Toronto Raptors.
+This telegram bot will be used to fetch game stats for the Toronto Raptors. It is hosted on Heroku.
 
 ## Supported Commands
 `/next {n}` - display the next `n` games
