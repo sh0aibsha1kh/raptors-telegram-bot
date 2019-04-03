@@ -44,4 +44,7 @@ raptorsTelegramBot.onText(/\/standings/, async (msg, match) => {
 raptorsTelegramBot.onText(/\/husnain/, async (msg, match) => {
     const chatId = msg.chat.id;
     raptorsTelegramBot.sendMessage(chatId, "Be Alert!", { parse_mode: 'markdown' });
+    setTimeout(() => {
+        raptorsTelegramBot.sendMessage(chatId, "Hands out of your pants!", { parse_mode: 'markdown' });
+    }, 5000);
 });
