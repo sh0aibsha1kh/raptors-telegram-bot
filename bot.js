@@ -40,3 +40,8 @@ raptorsTelegramBot.onText(/\/standings/, async (msg, match) => {
     const chatId = msg.chat.id;
     raptorsTelegramBot.sendMessage(chatId, await getStandings(), { parse_mode: 'markdown' });
 });
+
+raptorsTelegramBot.onText(/\/husnain/, async (msg, match) => {
+    const chatId = msg.chat.id;
+    raptorsTelegramBot.sendMessage(chatId, "Be Alert!", { parse_mode: 'markdown' });
+});
