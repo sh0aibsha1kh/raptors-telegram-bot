@@ -29,11 +29,23 @@ const getLastNGames = async n => {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
+/**
+ * Returns the numbers of games that have been played by finding the length of 
+ * the list of scores.
+ * 
+ * @returns {number}
+ */
 const getNumberOfGamesPlayed = async () => {
     const numberOfGamesPlayed = (await scrapeScores()).length;
     return numberOfGamesPlayed;
 }
 
+/**
+ * Returns the numbers of games remaining  by finding the length of the list of
+ *  opponents and subtracting the number of games played.
+ * 
+ * @returns {number}
+ */
 const getNumberOfGamesRemaining = async () => {
     const total = (await scrapeOpponents()).length;
     const gamesPlayed = await getNumberOfGamesPlayed();
