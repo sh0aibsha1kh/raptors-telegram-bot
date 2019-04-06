@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 const $ = require('cheerio');
-const { RAPTORS_URL, REFERENCE_URL } = require('../private/credentials');
+const { RAPTORS_URL, REFERENCE_URL } = require('../private/environment');
 
 /**
  * Returns a list of n previous games if n is valid (meaning that there are
