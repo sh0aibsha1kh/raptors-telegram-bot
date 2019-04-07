@@ -80,6 +80,11 @@ const getNextNGames = async n => {
     return output + `\`------------------------\nfetched in ${(end - start) / 1000} seconds\``;
 }
 
+/**
+ * Returns a list of tentative NBA playoff matchups.
+ * 
+ * @returns {string}
+ */
 const getPlayoffMatchups = async () => {
     const start = new Date().getTime();
     const standings = await scrapeStandings();
