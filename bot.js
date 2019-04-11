@@ -1,5 +1,5 @@
 const TelegramBotAPI = require('node-telegram-bot-api');
-const { TOKEN, PORT, HOST, SERVER_URL } = require('./private/credentials');
+const { TOKEN, PORT, HOST, SERVER_URL } = require('./private/environment');
 const { getNextNGames, getLastNGames, getNumberOfGamesPlayed, getNumberOfGamesRemaining, getPlayoffMatchups, getStandings } = require('./methods/parser');
 
 const raptorsTelegramBot = new TelegramBotAPI(TOKEN, { webHook: { port: PORT, host: HOST } });
